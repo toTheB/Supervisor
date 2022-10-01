@@ -1,0 +1,75 @@
+﻿<Window
+    x:Class="Supervisor.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Supervisor"
+    Width="330"
+    Height="180"
+    Closed="MainWindow_OnClosed"
+    ResizeMode="CanMinimize"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="DeadLineBlock" TargetType="TextBlock">
+            <Setter Property="Text">
+                <Setter.Value>
+                    <MultiBinding StringFormat="距离 {0} 还有 {1}">
+                        <Binding Path="DeadLineViewModel.Line" />
+                        <Binding Path="DeadLineViewModel.SpanText" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <ListView ItemsSource="{Binding Path=SubjectViewModels}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn
+                        Width="100"
+                        DisplayMemberBinding="{Binding Path=Name}"
+                        Header="科目" />
+
+                    <GridViewColumn Width="100" Header="剩余时间">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="{Binding Path=TextBrush}" Text="{Binding Path=TimeText}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="100" Header="操作">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Width="40"
+                                        Margin="0,0,2,0"
+                                        Command="{Binding PauseCommand}"
+                                        Content="{Binding Path=TimerState}" />
+                                    <Button
+                                        Width="40"
+                                        Margin="2,0,0,0"
+                                        Command="{Binding Path=ResetCommand}"
+                                        Content="重置" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+
+            </ListView.View>
+        </ListView>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <TextBlock Style="{StaticResource DeadLineBlock}" />
+        </StackPanel>
+    </Grid>
+</Window>
