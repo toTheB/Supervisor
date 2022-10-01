@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System;
+using System.Timers;
 using System.Windows;
 using System.Windows.Media;
 using Prism.Commands;
@@ -11,15 +12,14 @@ namespace Supervisor.ViewModel
     {
         private string _savePath = @"./";
 
-        private string _timeText;
 
-        public string TimeText
+        public TimeSpan LeftTimeView
         {
-            get { return _timeText; }
+            get { return _subject.TimeLeft; }
             set
             {
-                _timeText = value;
-                RaisePropertyChanged(nameof(TimeText));
+                _subject.TimeLeft = value;
+                RaisePropertyChanged(nameof(LeftTimeView));
             }
         }
 
@@ -95,7 +95,7 @@ namespace Supervisor.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    this._subject.TimeLeft--;
+                    this.LeftTimeView -= TimeSpan.FromSeconds(1);
                 });
             };
             _timer.Stop();
@@ -109,8 +109,7 @@ namespace Supervisor.ViewModel
             }));
             this._subject.OnTimeLeftChange += () =>
             {
-                RefreshTimeText();
-                if (this._subject.TimeLeft == 0)
+                if (this._subject.TimeLeft == TimeSpan.Zero)
                 {
                     _timer.Stop();
                     MessageBox.Show($"今天{this._subject.Name}的学习已经完成。");
@@ -122,20 +121,11 @@ namespace Supervisor.ViewModel
             }));
         }
 
-        private void RefreshTimeText()
-        {
-            var second = this._subject.TimeLeft % 60;
-            var minute = (this._subject.TimeLeft / 60) % 60;
-            var hour = (this._subject.TimeLeft / (60 * 60));
-            this.TimeText = $"{hour:00}:{minute:00}:{second:00}";
-        }
-
         public SubjectViewModel(Subject subject)
         {
             this._subject = subject;
             BindingCommands();
             InitTimer();
-            RefreshTimeText();
         }
     }
 }

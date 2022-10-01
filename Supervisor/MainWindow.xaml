@@ -38,7 +38,7 @@
                     <GridViewColumn Width="100" Header="剩余时间">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding Path=TextBrush}" Text="{Binding Path=TimeText}" />
+                                <TextBlock Foreground="{Binding Path=TextBrush}" Text="{Binding Path=LeftTimeView}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

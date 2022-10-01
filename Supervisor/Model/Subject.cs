@@ -7,9 +7,9 @@ namespace Supervisor.Model
         public string Name { get; set; }
         public event Action OnTimeLeftChange;
 
-        private int _timeLeft;
-        private int _originTime;
-        public int TimeLeft
+        private TimeSpan _timeLeft;
+        private TimeSpan _originTime;
+        public TimeSpan TimeLeft
         {
             get => _timeLeft;
             set
@@ -19,7 +19,7 @@ namespace Supervisor.Model
             }
         }
 
-        public Subject(string name, int timeLeft)
+        public Subject(string name, TimeSpan timeLeft)
         {
             this.Name = name;
             this._originTime = this.TimeLeft = timeLeft;

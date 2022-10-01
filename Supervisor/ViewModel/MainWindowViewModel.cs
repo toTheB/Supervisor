@@ -12,10 +12,10 @@ namespace Supervisor.ViewModel
 
         private static List<Subject> _defaultSubjects = new List<Subject>()
         {
-            new Subject("数学", (int)(3 * 60 * 60)),
-            new Subject("英语", (int)(1.5 * 60 * 60)),
-            new Subject("政治", (int)(1.5 * 60* 60)),
-            new Subject("专业课", (int)(2 * 60 * 60))
+            new Subject("数学", new TimeSpan(3,0,0)),
+            new Subject("英语", new TimeSpan(1,30,0)),
+            new Subject("政治", new TimeSpan(1,30,0)),
+            new Subject("专业课", new TimeSpan(2,0,0))
         };
 
         public List<SubjectViewModel> SubjectViewModels { get; set; }
@@ -58,7 +58,7 @@ namespace Supervisor.ViewModel
                 writer.WriteLine($"last closed:{now.Year},{now.Month},{now.Day}");
                 foreach (var subject in SubjectViewModels)
                 {
-                    writer.WriteLine($"{subject.Name}: {(subject.GetType().GetField("_subject", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(subject) as Subject)?.TimeLeft}");
+                    writer.WriteLine($"{subject.Name}: {(subject.GetType().GetField("_subject", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(subject) as Subject)?.TimeLeft.TotalSeconds}");
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace Supervisor.ViewModel
                 while (curLine != null)
                 {
                     var subjectAndTime = curLine.Split(':');
-                    subjectList.Add(new Subject(subjectAndTime[0], int.Parse(subjectAndTime[1])));
+                    subjectList.Add(new Subject(subjectAndTime[0], TimeSpan.FromSeconds(int.Parse(subjectAndTime[1]))));
                     curLine = reader.ReadLine();
                 }
                 return subjectList;
