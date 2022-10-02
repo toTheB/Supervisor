@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Media;
+using System.Speech.Synthesis;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
@@ -112,6 +114,7 @@ namespace Supervisor.ViewModel
                 if (this._subject.TimeLeft == TimeSpan.Zero)
                 {
                     _timer.Stop();
+                    SystemSounds.Beep.Play();
                     MessageBox.Show($"今天{this._subject.Name}的学习已经完成。");
                 }
             };

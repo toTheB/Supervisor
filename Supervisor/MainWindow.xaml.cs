@@ -13,11 +13,13 @@ namespace Supervisor
         {
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
+            this.Topmost = true;
         }
 
         private void MainWindow_OnClosed(object? sender, EventArgs e)
         {
             (this.DataContext as MainWindowViewModel)?.SaveSubjectList();
         }
+        //TODO 需要一个保持窗体最前的方法
     }
 }
