@@ -9,6 +9,7 @@
     Height="180"
     Closed="MainWindow_OnClosed"
     ResizeMode="CanMinimize"
+    Topmost="True"
     mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="DeadLineBlock" TargetType="TextBlock">

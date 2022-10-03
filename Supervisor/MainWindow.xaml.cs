@@ -13,7 +13,6 @@ namespace Supervisor
         {
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
-            this.Topmost = true;
         }
 
         private void MainWindow_OnClosed(object? sender, EventArgs e)
