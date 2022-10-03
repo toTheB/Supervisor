@@ -52,6 +52,7 @@ namespace Supervisor.ViewModel
             }
         }
 
+        private MainWindowViewModel _owner;
 
         public bool IsPaused
         {
@@ -98,6 +99,7 @@ namespace Supervisor.ViewModel
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     this.LeftTimeView -= TimeSpan.FromSeconds(1);
+                    this._owner.TotalTime -= TimeSpan.FromSeconds(1);
                 });
             };
             _timer.Stop();
@@ -111,6 +113,7 @@ namespace Supervisor.ViewModel
             }));
             this._subject.OnTimeLeftChange += () =>
             {
+                RaisePropertyChanged(nameof(LeftTimeView));
                 if (this._subject.TimeLeft == TimeSpan.Zero)
                 {
                     _timer.Stop();
@@ -124,11 +127,12 @@ namespace Supervisor.ViewModel
             }));
         }
 
-        public SubjectViewModel(Subject subject)
+        public SubjectViewModel(Subject subject, MainWindowViewModel owner)
         {
             this._subject = subject;
             BindingCommands();
             InitTimer();
+            _owner = owner;
         }
     }
 }

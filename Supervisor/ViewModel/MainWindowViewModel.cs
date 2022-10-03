@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using Prism.Mvvm;
 using Supervisor.Model;
 
 namespace Supervisor.ViewModel
 {
-    internal class MainWindowViewModel
+    internal class MainWindowViewModel : BindableBase
     {
         private static string SavePath = "./科目剩余时间.txt";
 
@@ -22,13 +24,27 @@ namespace Supervisor.ViewModel
 
         public DeadLineViewModel DeadLineViewModel { get; set; }
 
+        private TimeSpan _totalTime;
+
+        public TimeSpan TotalTime
+        {
+            get { return _totalTime; }
+            set
+            {
+                _totalTime = value;
+                RaisePropertyChanged(nameof(TotalTime));
+            }
+        }
+
         private void InitSubjectList()
         {
             var subjectList = LoadSubjectList();
             SubjectViewModels = new List<SubjectViewModel>();
+            TotalTime = TimeSpan.Zero;
             foreach (var subject in subjectList)
             {
-                SubjectViewModels.Add(new SubjectViewModel(subject));
+                SubjectViewModels.Add(new SubjectViewModel(subject, this));
+                TotalTime += subject.TimeLeft;
             }
         }
 

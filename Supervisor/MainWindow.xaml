@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:Supervisor.Model"
+    xmlns:viewModel="clr-namespace:Supervisor.ViewModel"
     Title="Supervisor"
     Width="330"
     Height="180"
@@ -11,35 +13,23 @@
     ResizeMode="CanMinimize"
     Topmost="True"
     mc:Ignorable="d">
-    <Window.Resources>
-        <Style x:Key="DeadLineBlock" TargetType="TextBlock">
-            <Setter Property="Text">
-                <Setter.Value>
-                    <MultiBinding StringFormat="距离 {0} 还有 {1}">
-                        <Binding Path="DeadLineViewModel.Line" />
-                        <Binding Path="DeadLineViewModel.SpanText" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <ListView ItemsSource="{Binding Path=SubjectViewModels}">
+        <ListView ItemsSource="{Binding Path=(viewModel:MainWindowViewModel.SubjectViewModels)}">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn
                         Width="100"
-                        DisplayMemberBinding="{Binding Path=Name}"
+                        DisplayMemberBinding="{Binding Path=(viewModel:SubjectViewModel.Name)}"
                         Header="科目" />
 
                     <GridViewColumn Width="100" Header="剩余时间">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding Path=TextBrush}" Text="{Binding Path=LeftTimeView}" />
+                                <TextBlock Foreground="{Binding Path=(viewModel:SubjectViewModel.TextBrush)}" Text="{Binding Path=(viewModel:SubjectViewModel.LeftTimeView)}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -51,26 +41,33 @@
                                     <Button
                                         Width="40"
                                         Margin="0,0,2,0"
-                                        Command="{Binding PauseCommand}"
-                                        Content="{Binding Path=TimerState}" />
+                                        Command="{Binding Path=(viewModel:SubjectViewModel.PauseCommand)}"
+                                        Content="{Binding Path=(viewModel:SubjectViewModel.TimerState)}" />
                                     <Button
                                         Width="40"
                                         Margin="2,0,0,0"
-                                        Command="{Binding Path=ResetCommand}"
+                                        Command="{Binding Path=(viewModel:SubjectViewModel.ResetCommand)}"
                                         Content="重置" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
-
             </ListView.View>
         </ListView>
         <StackPanel
             Grid.Row="1"
             HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <TextBlock Style="{StaticResource DeadLineBlock}" />
+            Orientation="Vertical">
+            <TextBlock Margin="0,0,0,2">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="距离 {0} 还有 {1}，总共还剩：{2}">
+                        <Binding Path="(viewModel:MainWindowViewModel.DeadLineViewModel).Line" />
+                        <Binding Path="(viewModel:MainWindowViewModel.DeadLineViewModel).SpanText" />
+                        <Binding Path="(viewModel:MainWindowViewModel.TotalTime)" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>
